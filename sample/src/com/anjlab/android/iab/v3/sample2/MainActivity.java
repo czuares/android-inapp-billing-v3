@@ -53,7 +53,11 @@ public class MainActivity extends Activity {
             @Override
             public void onProductPurchased(String productId, TransactionDetails details) {
 				showToast("onProductPurchased: " + productId);
-                updateTextViews();
+                if(bp.isValid(details)) {
+                    updateTextViews();
+                }else{
+                    showToast("Transaction was invalid");
+                }
             }
             @Override
             public void onBillingError(int errorCode, Throwable error) {
