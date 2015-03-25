@@ -294,6 +294,10 @@ public class BillingProcessor extends BillingBase {
 	public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode != PURCHASE_FLOW_REQUEST_CODE)
 			return false;
+		if (data == null) {
+			Log.e(LOG_TAG, "handleActivityResult: data is null!");
+			return false;
+		}
 		int responseCode = data.getIntExtra(Constants.RESPONSE_CODE, Constants.BILLING_RESPONSE_RESULT_OK);
 		Log.d(LOG_TAG, String.format("resultCode = %d, responseCode = %d", resultCode, responseCode));
 		String purchasePayload = getPurchasePayload();
@@ -337,7 +341,15 @@ public class BillingProcessor extends BillingBase {
 
 	private boolean verifyPurchaseSignature(String productId, String purchaseData, String dataSignature) {
         try {
-            return Security.verifyPurchase(productId, signatureBase64, purchaseData, dataSignature);
+            /*
+             * Skip the signature check if the provided License Key is NULL and return true in order to
+             * continue the purchase flow
+             */
+            if (TextUtils.isEmpty(signatureBase64)) {
+                return true;
+            } else {
+                return Security.verifyPurchase(productId, signatureBase64, purchaseData, dataSignature);
+            }
         } catch (Exception e) {
             return false;
         }
