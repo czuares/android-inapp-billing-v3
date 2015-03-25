@@ -4,3 +4,4 @@ gen/
 build
 local.properties
 .gradle
+sample/libs/anjlab-iabv3-current.jar
