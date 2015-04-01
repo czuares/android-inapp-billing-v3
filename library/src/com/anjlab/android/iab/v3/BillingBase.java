@@ -33,11 +33,14 @@ class BillingBase {
 		return contextReference.get();
 	}
 
-	protected String getPreferencesBaseKey() {
-		return contextReference.get().getPackageName() + "_preferences";
-	}
+    protected String getPreferencesBaseKey() {
+        if (contextReference.get() != null)
+            return contextReference.get().getPackageName() + "_preferences";
+        return null;
+    }
 
-	private SharedPreferences getPreferences() {
+
+    private SharedPreferences getPreferences() {
 		if (contextReference.get() != null)
 			return PreferenceManager.getDefaultSharedPreferences(contextReference.get());
 		return null;

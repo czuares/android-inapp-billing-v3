@@ -154,9 +154,11 @@ public class BillingProcessor extends BillingBase {
 					String signature = signatureList != null && signatureList.size() > i ? signatureList.get(i) : null;
 					cacheStorage.put(purchase.getString(Constants.RESPONSE_PRODUCT_ID), jsonData, signature);
 				}
-			}
-			return true;
-		} catch (Exception e) {
+			    return true;
+            } else {
+                Log.e(LOG_TAG, "Unable to load iap type " + type + "! Response code not OK - was " + bundle.getInt(Constants.RESPONSE_CODE));
+            }
+        } catch (Exception e) {
 			if (eventHandler != null)
 				eventHandler.onBillingError(Constants.BILLING_ERROR_FAILED_LOAD_PURCHASES, e);
 			Log.e(LOG_TAG, e.toString());
